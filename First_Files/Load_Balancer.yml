@@ -1,0 +1,17 @@
+---
+# Create a service called demo-service in the development namespace
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-service
+  namespace: development
+# The selector map tells the service to send traffic to any pods named
+# pod-info. Set the service's port to 80 and the traffic to port 3000.
+# Also set the type of the service (LoadBalancer).  
+spec:
+  selector:
+    app: pod-info
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: LoadBalancer

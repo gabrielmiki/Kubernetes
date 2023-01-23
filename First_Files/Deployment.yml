@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+# Kind of Kubernetes object we would like to create
+kind: Deployment
+# Naming the Deployment object. Specifient that it should be in the development namespace
+# and labeling all pods in this group pod-info.
+metadata:
+  name: pod-info-deployment
+  namespace: development
+  labels:
+    app: pod-info
+# Make our application highly avaiable. Specify how many replicas of the container we want
+# to run.
+spec:
+  replicas: 3
+  selector:
+    matchLabels: 
+      app: pod-info
+  template: 
+    metadata:
+      labels:
+        app: pod-info
+    # Containers map. Specifications of the containers we want to run in the pod. Name of the
+    # container, use the image of the kimschles registry and direct traffic from the container
+    # to port 3000. Set the container to have three environment variables
+    spec: 
+      containers:
+      - name: pod-info-container
+        image: kimschles/pod-info-app:latest
+        ports:
+        - containerPort: 3000
+        env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP

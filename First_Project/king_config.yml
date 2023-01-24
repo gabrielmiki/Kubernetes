@@ -1,0 +1,28 @@
+# File that uses the Kubernetes manifest format. Trying to configure a 
+# cluster object. API versions can be found in Kubernetes API Reference
+# Docs. Kind uses containerd to configure its container runtime. 
+# Containerd provides configuration changes for containerd that kubeadm
+# will need to be aware of when creating our cluster.
+kind: Cluster
+apiVersion: kind.x-k8.io/v1alpha4
+containerdConfigPatches:
+# Informs the containerd about the creation of the local-registry
+- | -
+  [plugins."io.container.grpc.v1.cri".registry.mirrors."localhost:5000"]
+    endpoint = ["http://local-registry:5000"]
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+

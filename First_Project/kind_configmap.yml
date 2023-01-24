@@ -1,0 +1,11 @@
+# ConfigMaps in Kubernetes are used to provide configuration data into
+# pods running inside a Kubernetes. Also found in Kubernetes API Reference Docs.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: local-registry-hosting
+  namespace: kube-public
+data:
+  localRegistryHosting.v1: |
+    host: "localhost:${reg_port}"
+    help: "http://kind.sigs.k8s.io/docs/user/local-registry/"

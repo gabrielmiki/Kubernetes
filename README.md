@@ -1,4 +1,5 @@
 # Kubernetes
+Pods are the smallest unit of compute. Kubernetes pods group similar containers into a logical unit. Containers inside a pod have the same IP addresses and move together. Pods get schedules on Kubernetes Kubelets Nodes
 A cluster is an instance of Kubernetes. Each cluster has a control plane and at least one worker node. 
 The control plane makes sure nodes and pods are created, modified and deleted without any issues. Made up of several components:
 - Kube API Server: handles the most request form the user and inside the cluster.
@@ -25,14 +26,14 @@ Namespaces let you isolate and organize workloads. Use different namespaces tp p
 Pods are the Kubernetes resource that run our applications and microsservices. 
 
 ### Kubernetes Service 
-There are three types of Kubernetes Service: LoadBalancer, ClusterIP, NotePort. 
+Services provides a single IP address and a DNS record for a group of related pods. There are three types of Kubernetes Service: LoadBalancer, ClusterIP, NotePort. 
 - LoadBalancer: Is a load balancer that direct traffic from the internet to kubernetes pods. A load balancer has a public and static IP address. 
 
 ### CPU and Memory
 The resources are related to the amount of memory and CPU a pod is using.
 
 ### Kubernetes Deployment
-Kubernets deplyment is the most cummon way to deply containerized application. Deployments allows you to controll the number of replicas running. In orther to deploy a new application, Kubernetes can keep the old version up and running, roll up the new version, make sure that the new pods are running and healthy and than remove the old pods.
+Kubernets depl0yment is the most cummon way to deply containerized application. Provides a desired state for pods in an application. Deployments allows you to controll the number of replicas running. In orther to deploy a new application, Kubernetes can keep the old version up and running, roll up the new version, make sure that the new pods are running and healthy and than remove the old pods.
 
 ### Kebernetes DaemonSet
 Another way to deploy pods. Puts one copy of a container on every node running in the cluster, can not controll the number of replicas running. 
@@ -59,7 +60,7 @@ securityContext:
 This way the container is run as non root (can not use sudo to run escallation commands) and filesystem is read only.
 Other way to ensure security is to scan YAML files with a tool.
 
-## Kubernetes Commands
+### Kubernetes Commands
 - kubectl cluster-info (cluster settings)
 - kubectl get nodes (visualize the nodes)
 - kubectl get namespaces (namespaces created)
@@ -72,3 +73,24 @@ Other way to ensure security is to scan YAML files with a tool.
 - kubectl describe pod name_pod -n namespace_desired
 - kubectl get pods -n namespace_name -o wide (IP addresses of our pods)
 - kubectl exec -it pod_name -- /bin/sh
+
+## First Project
+Use Kubernets and Kind to deploy an application locally. Kind is a tool that allows you to create Kubernetes custers locally inside of Docker.
+
+### Kubernetes Manifests
+Are files that are used to install and configure objects within a Kubernetes cluster.
+
+### Commands Steps
+...
+5. Create a local registry with:
+```
+docker run --name local-registry -d --restart=always -p 5000:5000 registry:2
+```
+6. Verify the existance of the registry:
+```
+curl http://localhost:5000/v2
+```
+7. Verify local-registry content:
+```
+curl --location http://localhost:5000/v2
+```

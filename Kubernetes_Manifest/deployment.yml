@@ -1,0 +1,34 @@
+# In the Kubernetes API Reference Docs ther are more details.
+# - Apps/v1: Defines the API that defines what this deployment
+# object is. 
+# - Kind: determines the object that is being created.
+# - Metadata: labels are how you find things inside of a Kubernetes
+# cluster can used with selectors in orther to select resources
+# that also have this label attached to them.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: explorecalifornia.com
+  name: explorecalifornia.com
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: explorecalifornia.com
+  # Allows you to define how the deployment will occur. There are
+  # two types: 
+  # - rollingUpdate
+  # - Recreate
+  strategy: {}
+  # Template for the pods we are going to create. 
+  template:
+    metadata:
+      labels:
+        app: explorecalifornia.com
+    spec:
+      containers:
+      - image: localhost:5000/explorecalifornia.com
+        name: explorecalifornia-com-vld7j
+        resources: {}
+status: {}

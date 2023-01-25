@@ -74,23 +74,60 @@ Other way to ensure security is to scan YAML files with a tool.
 - kubectl get pods -n namespace_name -o wide (IP addresses of our pods)
 - kubectl exec -it pod_name -- /bin/sh
 
-## First Project
-Use Kubernets and Kind to deploy an application locally. Kind is a tool that allows you to create Kubernetes custers locally inside of Docker.
+## Kubernetes Manifest
+Project based on a course in Linkedin Learning - Kubernetes: your first project. Use Kubernets Manifests and Kind to deploy an application locally. Kind is a tool that allows you to create Kubernetes custers locally inside of Docker.
 
 ### Kubernetes Manifests
-Are files that are used to install and configure objects within a Kubernetes cluster.
+Are files that are used to install and configure objects within a Kubernetes cluster. Kubernetes creates resources through YAML files, applications describing what you want to creat.
 
-### Commands Steps
-...
-5. Create a local registry with:
+#### Creatin a Kubernetes Manifest
+1. Running the command above create a YAML file with the image names and configurations and saves it into deployment.yml
+```  
+kubectl create deployment --dry-run=client --image localhost:5000/explorecalifornia.com explorecalifornia.com --output=yaml > deployment.yml
 ```
-docker run --name local-registry -d --restart=always -p 5000:5000 registry:2
+
+### Deploying the website into Kubernetes
+1. Create the pods that will run the container for our website. Note that creating pods directly is not the same as creating deployments. Deployments make sure that the number of pods we want hosting out web site stay up and running all time.
+2. Tag the image
 ```
-6. Verify the existance of the registry:
+docker tag explorecalifornia.com 127.0.0.1:5000/explorecalifornia.com
 ```
-curl http://localhost:5000/v2
+3. And push to the local registry.
 ```
-7. Verify local-registry content:
+docker push 127.0.0.1:5000/explorecalifornia.com
 ```
-curl --location http://localhost:5000/v2
+4. Apply the deployment.yml
+5. Use kubectl port-forward to mount ports frm the host into the pods inside the deployment
+```
+kubectl port-forward deployment/explorecalifornia.com 8080:80
+```
+
+### Kubernetes Services
+To make the website acessible we map explorecalifornia.com into a single point of entry that is going to live inside Kubernetes, the Service. 
+1. Create a clusterip. That creates avirtual IP address that maps all the pods that are running inside of our deployment.
+```
+kubectl create service clusterip --dry-run=client --tcp=80:80 explorecalifornia.com --output=yml > service.yml
+```
+2. AQpplies the service.
+``` 
+kubectl apply -f service.yml
+```
+3. Verify if it is working.
+```
+kubectl port-foward service/explorecalifornia-svc 8080:8080
+```
+
+### Ingress
+Enables external access into other kubernetes resources. 
+1. Create an ingress
+```
+kubectl create ingress explorecalifornia.com --rule="explorecalifornia.com/=explorecalifornia-svc:80" --dry-run=client --output=yaml > ingress.yaml
+```
+2. Install nginx ingress controller.
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+```
+3. Apply ingress
+```
+kubectl apply -f ingress.yml
 ```

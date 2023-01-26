@@ -131,3 +131,58 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main
 ```
 kubectl apply -f ingress.yml
 ```
+
+## Microservices
+Is a service-oriented architecture that structures the application as a colective of loosely coupled services. This part of the repo is based on the Linkeding Learning course - Kubernetes: Microservices. Starts with a monolith application based in three modules User Module (user managment, login and profile managment), Catalog Module (list of products), Wish List Module (API used by the customer).
+
+### Twelve-Factor Methodology
+
+#### Principle 1: Codebase
+Codebase must be tracked in version control and will have many deploys.
+
+#### Principle 2: Dependencies
+Dependencies are explicity declared and isolated.
+
+#### Principle 3: Configuration
+Add configuration via environment variables or config files.
+
+#### Principle 4: Backing Services
+Treat backing services as an attached resource.
+
+#### Principle 5: Build, Release and Run
+Always have a build and deploy strategy. Build strategies for repeat builds, versioning of running system and rollback.
+
+#### Principle 6: Processes
+Execute application as a stateless process. 
+
+#### Principle7: Port Bindings
+Expose services via port bindings. 
+
+#### Principles 8, 9 and 10:
+Concurrency (Scale out with the process model), Disposability (Quick application startup and shutdown times) and a Dev/Prod Parity (Application is treated the same way in dev, staging and production).
+
+#### Principles 11 and 12:
+Log Management and Admin Tasks.
+
+### Building Blocks Directory
+Cover the Codebase, Dependencies, Dev/Staging/Production Parity and Admin Processes. 
+
+#### Codebase Workflow
+1. Push code to your source control
+2. Automate build is kicked off to build and run tests against code.
+3. Build container image; push to image repository.
+
+### Deployment Patter Directory
+Applies Application Configuration, Build/Release/Run, Processes and Port Bindindgs.
+
+#### Application Configuration
+There are two ways of doing application configuration in Kubernetes:
+- configMaps: for generic information (metada, version). 
+- Secrets: for sensitive data
+This values are fed to the pods as Environment Variables or Files
+
+### Runtime Patterns Directory
+Baking Services, Features Around Concurrency, Disposability and Log Management
+
+### Breaking the Application
+The application is devides into three microservices (Authentication, Wish List Funtionality and The Catalog Operations). Each Microservice has its own REST API.
